@@ -8,11 +8,13 @@ export class Hokey {
     readonly ALL_MESSAGES: HokeyAllMessages;
     readonly FALLBACK_DEFAULT_LANG: string;
     STOP_WORDS: string[] | null;
+
     constructor(ALL_MESSAGES: HokeyAllMessages, FALLBACK_DEFAULT_LANG: string) {
         this.ALL_MESSAGES = ALL_MESSAGES;
         this.FALLBACK_DEFAULT_LANG = FALLBACK_DEFAULT_LANG;
         this.STOP_WORDS = null;
     }
+
     localesForAccount(
         account: AccountWithLocale,
         browserLocale: string | null = null,
@@ -64,14 +66,14 @@ export class Hokey {
             }
         }
         // console.log(`findFirstLocaleMatch(${JSON.stringify(locales)}) returning DEFAULT_LOCALE [${DEFAULT_LOCALE}]`)
-        if (defaultLocale) return defaultLocale;
+        if (defaultLocale && this.ALL_MESSAGES[defaultLocale]) return defaultLocale;
         if (this.ALL_MESSAGES[this.FALLBACK_DEFAULT_LANG]) return this.FALLBACK_DEFAULT_LANG;
 
         const all = Object.keys(this.ALL_MESSAGES);
         if (all.length > 0) {
             return all[0]; // just return something valid
         }
-        throw new Error("findFirstLocaleMatch: no languages defined in MESSAGES!");
+        throw new Error("findFirstLocaleNameMatch: no languages defined!");
     }
 
     findFirstLocaleMatch(locales: string[]): HokeyLocaleMessages {
@@ -116,18 +118,18 @@ export class Hokey {
             : undefined;
     }
 
-    stopWords = (ALL_MESSAGES: HokeyAllMessages): string[] => {
+    stopWords = (): string[] => {
         if (this.STOP_WORDS != null) {
             return this.STOP_WORDS;
         }
         const stops: string[] = [];
-        for (const locale of Object.keys(ALL_MESSAGES)) {
+        for (const locale of Object.keys(this.ALL_MESSAGES)) {
             if (
-                ALL_MESSAGES[locale] &&
-                ALL_MESSAGES[locale].search_stop_words &&
-                !isUnknownMessage(ALL_MESSAGES[locale].search_stop_words)
+                this.ALL_MESSAGES[locale] &&
+                this.ALL_MESSAGES[locale].search_stop_words &&
+                !isUnknownMessage(this.ALL_MESSAGES[locale].search_stop_words)
             ) {
-                stops.push(...ALL_MESSAGES[locale].search_stop_words.split(","));
+                stops.push(...this.ALL_MESSAGES[locale].search_stop_words.split(","));
             }
         }
         const allStops: string[] = [];
