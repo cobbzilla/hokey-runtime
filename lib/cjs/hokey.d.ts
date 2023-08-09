@@ -15,5 +15,5 @@ export declare class Hokey {
     currentLocaleForAccount(account: AccountWithLocale, browserLocale: string | null, anonLocale: string | null): string;
     localeMessagesForAccount(account: AccountWithLocale, browserLocale: string | null, anonLocale: string | null): HokeyLocaleMessages;
     localeEmoji(locale: string): string | undefined;
-    stopWords: (ALL_MESSAGES: HokeyAllMessages) => string[];
+    stopWords: () => string[];
 }
