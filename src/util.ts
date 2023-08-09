@@ -31,3 +31,10 @@ const messageNotFoundHandler = {
 
 export const wrapMessages = (messages: HokeyLocaleMessages): HokeyLocaleMessages =>
     new Proxy(Object.assign({}, messages), messageNotFoundHandler);
+
+export const normalizeMsg = (errMsg: string) => errMsg.replace(/\./g, "_");
+
+export const errMatch = (f: string) => (e: string) => normalizeMsg(e) === normalizeMsg(f);
+
+export const errMatchStart = (objPath: string) => (e: string) =>
+    normalizeMsg(e).startsWith(`${normalizeMsg(objPath)}_`);
