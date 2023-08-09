@@ -4,15 +4,15 @@ export const parseMessage = (msg: string, messages: Record<string, string>, ctx:
     isUnknownMessage(messages[msg])
         ? ""
         : "" +
-        messages[msg].replace(/{{[^}]+}}/g, (match: string): string => {
-            const expression = match.slice(2, -2).trim();
-            return ctx[expression] ? `${ctx[expression]}` : `?!${expression}`;
-        });
+          messages[msg].replace(/{{[^}]+}}/g, (match: string): string => {
+              const expression = match.slice(2, -2).trim();
+              return ctx[expression] ? `${ctx[expression]}` : `?!${expression}`;
+          });
 
 export const parseDateMessage = (
     msg: string,
     millis: number | string | Date,
-    messages: Record<string, string>
+    messages: Record<string, string>,
 ): string => {
     if (typeof millis === "undefined" || millis === null || millis === 0) return messages.label_date_undefined;
     const date = new Date(millis);
@@ -33,21 +33,21 @@ export const parseDateMessage = (
         H: "" + date.getHours(),
         h: "" + (date.getHours() > 12 ? date.getHours() - 12 : date.getHours() === 0 ? 12 : date.getHours()),
         A: (date.getHours() >= 12
-                ? messages["label_date_day_half_pm"].toUpperCase()
-                : messages["label_date_day_half_am"]
+            ? messages["label_date_day_half_pm"].toUpperCase()
+            : messages["label_date_day_half_am"]
         ).toUpperCase(),
         a: (date.getHours() >= 12
-                ? messages["label_date_day_half_pm"].toLowerCase()
-                : messages["label_date_day_half_am"]
+            ? messages["label_date_day_half_pm"].toLowerCase()
+            : messages["label_date_day_half_am"]
         ).toLowerCase(),
         m: "" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()),
         s: "" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds()),
     };
     return msg
         ? "" +
-        msg.replace(/{{\w+?}}/g, (match) => {
-            const expression = match.slice(2, -2).trim();
-            return context[expression] ? `${context[expression]}` : `?!${expression}`;
-        })
+              msg.replace(/{{\w+?}}/g, (match) => {
+                  const expression = match.slice(2, -2).trim();
+                  return context[expression] ? `${context[expression]}` : `?!${expression}`;
+              })
         : "";
 };
