@@ -1,6 +1,6 @@
 {
   "name": "hokey-runtime",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "description": "runtime library for hokeylization",
   "keywords": [
@@ -51,7 +51,6 @@
     "chai": "^4.3.6",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
-    "mobiletto-orm-typedef": "^2.3.19",
     "mocha": "^10.2.0",
     "prettier": "^3.0.0",
     "tslint-config-prettier": "^1.18.0",
