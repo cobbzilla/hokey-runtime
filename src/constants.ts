@@ -3,7 +3,7 @@ export const ALL_LANGS =
 
 export const ALL_LANGS_ARRAY = ALL_LANGS.split(",");
 
-export const ISO_639 = {
+export const ISO_639: Record<string, string> = {
     afr: "af",
     amh: "am",
     ara: "ar",
