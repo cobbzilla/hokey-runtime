@@ -1,6 +1,6 @@
 {
   "name": "hokey-runtime",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "type": "module",
   "description": "runtime library for hokeylization",
   "keywords": [
@@ -28,13 +28,13 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "mocha ./test/*.spec.js",
-    "tsc": "tsc --module es2020 -p tsconfig.json && tsc --module es2020 -p tsconfig-cjs.json",
+    "tsc": "tsc --module es2020 -p tsconfig.json",
     "lint": "npx eslint src test",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src test --check",
     "prettier:fix": "npm run prettier -- --write"
   },
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
   "exports": {
     ".": "./lib/esm/index.js"
