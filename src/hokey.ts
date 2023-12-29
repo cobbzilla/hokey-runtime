@@ -4,14 +4,18 @@ export type AccountWithLocale = {
     locale?: string;
 };
 
+export const getLang = (loc: string): string => (loc.includes("_") ? loc.substring(0, loc.indexOf("_")) : loc);
+
 export class Hokey {
     readonly ALL_MESSAGES: HokeyAllMessages;
-    readonly FALLBACK_DEFAULT_LANG: string;
+    readonly FALLBACK_DEFAULT_LOCALE: string;
+    readonly SELECTABLE_LOCALES: string[];
     STOP_WORDS: string[] | null;
 
-    constructor(ALL_MESSAGES: HokeyAllMessages, FALLBACK_DEFAULT_LANG: string) {
+    constructor(ALL_MESSAGES: HokeyAllMessages, FALLBACK_DEFAULT_LOCALE: string, SELECTABLE_LOCALES: string[]) {
         this.ALL_MESSAGES = ALL_MESSAGES;
-        this.FALLBACK_DEFAULT_LANG = FALLBACK_DEFAULT_LANG;
+        this.FALLBACK_DEFAULT_LOCALE = FALLBACK_DEFAULT_LOCALE;
+        this.SELECTABLE_LOCALES = SELECTABLE_LOCALES;
         this.STOP_WORDS = null;
     }
 
@@ -45,11 +49,12 @@ export class Hokey {
         anonLocale: string | null,
     ): HokeyLocaleMessages[] {
         const messages = this.findFirstLocaleMatch(this.localesForAccount(account, browserLocale, anonLocale));
-        return Object.keys(this.ALL_MESSAGES).map((loc: string) => {
+        return this.SELECTABLE_LOCALES.map((loc: string) => {
             const localeDescription = messages["locale_" + loc];
+            const sameLang = getLang(loc) === getLang(messages.id);
             const description =
                 this.ALL_MESSAGES[loc] && this.ALL_MESSAGES[loc]["locale_" + loc]
-                    ? `${this.ALL_MESSAGES[loc]["locale_" + loc]} (${localeDescription})`
+                    ? this.ALL_MESSAGES[loc]["locale_" + loc] + (sameLang ? "" : ` (${localeDescription})`)
                     : localeDescription;
             return {
                 name: loc,
@@ -67,7 +72,7 @@ export class Hokey {
         }
         // console.log(`findFirstLocaleMatch(${JSON.stringify(locales)}) returning DEFAULT_LOCALE [${DEFAULT_LOCALE}]`)
         if (defaultLocale && this.ALL_MESSAGES[defaultLocale]) return defaultLocale;
-        if (this.ALL_MESSAGES[this.FALLBACK_DEFAULT_LANG]) return this.FALLBACK_DEFAULT_LANG;
+        if (this.ALL_MESSAGES[this.FALLBACK_DEFAULT_LOCALE]) return this.FALLBACK_DEFAULT_LOCALE;
 
         const all = Object.keys(this.ALL_MESSAGES);
         if (all.length > 0) {

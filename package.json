@@ -1,6 +1,6 @@
 {
   "name": "hokey-runtime",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "type": "module",
   "description": "runtime library for hokeylization",
   "keywords": [
