@@ -22,4 +22,14 @@ describe("template message test", async () => {
         const err = msg.fieldErrorMessage("usernameOrEmail", "required", m);
         expect(err).eq("Username or email is required");
     });
+    it("fieldErrorMessage properly renders a nested error message", async () => {
+        const m = {
+            error_field_required: "{{ field }} is required",
+            label_width: "Width",
+        };
+        const fld = "options[0]_display_width";
+        const errMsg = "options[0]_display_width_required";
+        const err = msg.fieldErrorMessage(fld, errMsg, m);
+        expect(err).eq("Width is required");
+    });
 });

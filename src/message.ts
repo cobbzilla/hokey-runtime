@@ -20,14 +20,30 @@ export const fieldErrorMessage = (
     if (typeof field === "object") {
         fieldObject = field;
         field = field.name;
+    } else {
+        // remove any embedded indexes
+        field = field.replace(/\[\d+]/, "");
     }
     if (typeof labelPrefixes === "string") {
         labelPrefixes = [labelPrefixes];
     }
-    const fieldMessage =
-        fieldObject && fieldObject.label && !isUnknownMessage(messages[fieldObject.label])
-            ? messages[fieldObject.label]
-            : findMessage(field, messages, labelPrefixes);
+    let fieldMessage: string | null = null;
+    if (fieldObject && fieldObject.label && !isUnknownMessage(messages[fieldObject.label])) {
+        fieldMessage = messages[fieldObject.label];
+    } else {
+        let searchField = field;
+        while (fieldMessage == null) {
+            fieldMessage = findMessage(searchField, messages, labelPrefixes);
+            if (fieldMessage == null) {
+                const underscore = searchField.indexOf("_");
+                if (underscore === -1 || underscore === searchField.length - 1) break;
+                searchField = searchField.substring(underscore + 1);
+            }
+        }
+        if (fieldMessage == null) {
+            fieldMessage = "??!" + field;
+        }
+    }
     if (Array.isArray(error)) {
         let message = "";
         for (const e of error) {
